@@ -40,30 +40,31 @@ public class CustomerRepository : ICustomerRepository
 
     public bool IdExists(Customer[] customers)
     {
-        return customers.Any(customer => IdExists(customer.Id));
+        var ids = customers.Select(x => x.Id);
+
+        return customers.Any(customer => IdExists(customer.Id))
+            && customers.Length == ids.Distinct().Count();
     }
 
     public bool IdExists(int id) => Ids.Contains(id);
 
-    public async Task AddCustomers(Customer[] customers)
+    private void InsertCustomer(Customer customer)
     {
-        if (IdExists(customers))
+        if (Customers.Length == 0)
         {
-            throw new ArgumentException("Id already exists.");
+            Customers = new[] { customer };
+            Ids.Add(customer.Id);
+            return;
         }
-        
-        // Sort logic implemented at Ria.Services.Customer.Web.Utilities extension method.
-        customers.Sort();
-
-        var temp = new Customer[Customers.Length + customers.Length];
 
         var i = 0;
-        var j = 0;
         var k = 0;
+        
+        var temp = new Customer[Customers.Length + 1];
 
-        while (i < Customers.Length && j < customers.Length)
+        while (i < Customers.Length)
         {
-            if (Customers[i] < customers[j])
+            if (Customers[i] < customer)
             {
                 temp[k] = Customers[i];
                 k++;
@@ -71,11 +72,17 @@ public class CustomerRepository : ICustomerRepository
             }
             else
             {
-                temp[k] = customers[j];
-                Ids.Add(customers[j].Id);
+                temp[k] = customer;
+                Ids.Add(customer.Id);
                 k++;
-                j++;
+                break;
             }
+        }
+
+        if (i == Customers.Length)
+        {
+            temp[k] = customer;
+            Ids.Add(customer.Id);
         }
 
         while (i < Customers.Length)
@@ -85,15 +92,21 @@ public class CustomerRepository : ICustomerRepository
             i++;
         }
 
-        while (j < customers.Length)
+        Customers = temp;
+    }
+
+    public async Task AddCustomers(Customer[] customers)
+    {
+        if (IdExists(customers))
         {
-            temp[k] = customers[j];
-            Ids.Add(customers[j].Id);
-            k++;
-            j++;
+            throw new ArgumentException("Id already exists.");
         }
 
-        Customers = temp;
+        lock (Customers)
+        {
+            foreach (var customer in customers)
+                InsertCustomer(customer);
+        }
 
         await _customerPublisher.WriteAsync(Customers);
     }
