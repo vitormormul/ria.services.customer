@@ -1,10 +1,36 @@
+using System.Threading.Channels;
+
 namespace Ria.Services.Customer.Web;
 
 public class CustomerRepository
 {
+    private readonly Channel<Customer[]> _customerChannel;
     public Customer[] Customers { get; private set; } = Array.Empty<Customer>();
+    private HashSet<int> Ids { get; set; } = new();
 
-    private HashSet<int> Ids { get; set; } = new HashSet<int>();
+    public CustomerRepository(Channel<Customer[]> customerChannel)
+    {
+        _customerChannel = customerChannel;
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        try
+        {
+            using var reader = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data.json"));
+            var customers = reader.ReadToEnd();
+            Customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customer[]>(customers) ?? Array.Empty<Customer>();
+            foreach (var customer in Customers)
+            {
+                Ids.Add(customer.Id);
+            }
+        }
+        catch
+        {
+            Customers = Array.Empty<Customer>();
+        }
+    }
 
     public bool IdExists(Customer[] customers)
     {
@@ -19,7 +45,7 @@ public class CustomerRepository
 
     public bool IdExists(int id) => Ids.Contains(id);
 
-    public void AddCustomers(Customer[] customers)
+    public async Task AddCustomers(Customer[] customers)
     {
         // Sort logic implemented at Ria.Services.Customer.Web.Utilities extension method.
         customers.Sort(0, customers.Length - 1);
@@ -63,5 +89,7 @@ public class CustomerRepository
         }
 
         Customers = temp;
+
+        await _customerChannel.Writer.WriteAsync(Customers);
     }
 }
