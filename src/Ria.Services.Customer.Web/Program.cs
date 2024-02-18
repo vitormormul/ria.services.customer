@@ -1,11 +1,14 @@
+using FluentValidation;
 using Ria.Services.Customer.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddSingleton<CustomerRepository>();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddScoped<IValidator<Customer>, CustomerValidator>();
+services.AddSingleton<CustomerRepository>();
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var app = builder.Build();
 
