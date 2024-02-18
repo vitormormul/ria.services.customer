@@ -6,12 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddScoped<IValidator<Customer>, CustomerValidator>();
-services.AddSingleton<CustomerRepository>();
+services.AddSingleton<ICustomerRepository, CustomerRepository>();
+services.AddSingleton<ICustomerPublisher, CustomerPublisher>();
 services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddSingleton(Channel.CreateUnbounded<Customer[]>(new UnboundedChannelOptions { SingleReader = true }));
-services.AddHostedService<CustomersSync>();
+services.AddHostedService<CustomerConsumer>();
 
 var app = builder.Build();
 

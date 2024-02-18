@@ -6,10 +6,16 @@ public static class Main
 
     private static readonly int[] Payments = { 30, 50, 60, 80, 140, 230, 370, 610, 980 };
 
-    private static readonly List<Dictionary<int, int>> Denominations = new();
+    public static readonly List<Dictionary<int, int>> Denominations = new();
 
-    public static void Run()
+    public static void Run(int testPayment = -1)
     {
+        if (testPayment != -1)
+        {
+            GetDenominations(testPayment, Cartridges, new Dictionary<int, int>());
+            return;
+        }
+
         foreach (var payment in Payments)
         {
             Denominations.Clear();

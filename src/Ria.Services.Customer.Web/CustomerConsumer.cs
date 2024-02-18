@@ -2,11 +2,11 @@ using System.Threading.Channels;
 
 namespace Ria.Services.Customer.Web;
 
-public class CustomersSync : BackgroundService
+public class CustomerConsumer : BackgroundService
 {
     private readonly Channel<Customer[]> _customerChannel;
 
-    public CustomersSync(Channel<Customer[]> customerChannel)
+    public CustomerConsumer(Channel<Customer[]> customerChannel)
     {
         _customerChannel = customerChannel;
     }

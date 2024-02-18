@@ -1,16 +1,22 @@
-using System.Threading.Channels;
-
 namespace Ria.Services.Customer.Web;
 
-public class CustomerRepository
+public interface ICustomerRepository
 {
-    private readonly Channel<Customer[]> _customerChannel;
-    public Customer[] Customers { get; private set; } = Array.Empty<Customer>();
-    private HashSet<int> Ids { get; set; } = new();
+    Customer[] Customers { get; }
+    bool IdExists(Customer[] customers);
+    bool IdExists(int id);
+    Task AddCustomers(Customer[] customers);
+}
 
-    public CustomerRepository(Channel<Customer[]> customerChannel)
+public class CustomerRepository : ICustomerRepository
+{
+    private readonly ICustomerPublisher _customerPublisher;
+    public Customer[] Customers { get; private set; } = Array.Empty<Customer>();
+    private HashSet<int> Ids { get; } = new();
+
+    public CustomerRepository(ICustomerPublisher customerPublisher)
     {
-        _customerChannel = customerChannel;
+        _customerPublisher = customerPublisher;
         LoadData();
     }
 
@@ -34,21 +40,20 @@ public class CustomerRepository
 
     public bool IdExists(Customer[] customers)
     {
-        foreach (var customer in customers)
-        {
-            if (IdExists(customer.Id))
-                return true;
-        }
-
-        return false;
+        return customers.Any(customer => IdExists(customer.Id));
     }
 
     public bool IdExists(int id) => Ids.Contains(id);
 
     public async Task AddCustomers(Customer[] customers)
     {
+        if (IdExists(customers))
+        {
+            throw new ArgumentException("Id already exists.");
+        }
+        
         // Sort logic implemented at Ria.Services.Customer.Web.Utilities extension method.
-        customers.Sort(0, customers.Length - 1);
+        customers.Sort();
 
         var temp = new Customer[Customers.Length + customers.Length];
 
@@ -90,6 +95,6 @@ public class CustomerRepository
 
         Customers = temp;
 
-        await _customerChannel.Writer.WriteAsync(Customers);
+        await _customerPublisher.WriteAsync(Customers);
     }
 }

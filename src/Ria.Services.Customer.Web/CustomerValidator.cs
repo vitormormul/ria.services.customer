@@ -4,7 +4,7 @@ namespace Ria.Services.Customer.Web;
 
 public class CustomerValidator : AbstractValidator<Customer>
 {
-    public CustomerValidator(CustomerRepository customerRepository)
+    public CustomerValidator(ICustomerRepository customerRepository)
     {
         RuleFor(customer => customer.Id)
             .GreaterThan(-1)

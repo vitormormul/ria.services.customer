@@ -1,5 +1,4 @@
 using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ria.Services.Customer.Web.Controllers;
@@ -8,10 +7,10 @@ namespace Ria.Services.Customer.Web.Controllers;
 [Route("/customers")]
 public class CustomerController : ControllerBase
 {
-    private readonly CustomerRepository _customerRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IValidator<Customer> _customerValidator;
 
-    public CustomerController(CustomerRepository customerRepository, IValidator<Customer> customerValidator)
+    public CustomerController(ICustomerRepository customerRepository, IValidator<Customer> customerValidator)
     {
         _customerRepository = customerRepository;
         _customerValidator = customerValidator;
@@ -34,7 +33,7 @@ public class CustomerController : ControllerBase
         if (errors.Any())
             return BadRequest(errors.Distinct());
         
-        _customerRepository.AddCustomers(customers.ToArray());
+        await _customerRepository.AddCustomers(customers.ToArray());
 
         return Ok();
     }

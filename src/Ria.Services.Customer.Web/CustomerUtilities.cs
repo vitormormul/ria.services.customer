@@ -1,10 +1,13 @@
 namespace Ria.Services.Customer.Web;
 
-public static class Utilities
+public static class CustomerUtilities
 {
     
-    public static void Sort(this Customer[] arr, int left, int right)
+    public static void Sort(this Customer[] arr, int left = -1, int right = -1)
     {
+        if (left == -1) left = 0;
+        if (right == -1) right = arr.Length - 1;
+        
         if (left < right)
         {
             int pivot = Partition(arr, left, right);

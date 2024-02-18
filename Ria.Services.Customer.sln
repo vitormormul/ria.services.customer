@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ria.Services.Payment.Denomi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ria.Services.Customer.Web", "src\Ria.Services.Customer.Web\Ria.Services.Customer.Web.csproj", "{3695A003-EB64-4849-B852-1F447ED623F8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6424E9D4-5F70-4FCA-9AB7-FF55B0AAEF92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ria.Services.Customer.Web.Tests", "tests\Ria.Services.Customer.Web.Tests\Ria.Services.Customer.Web.Tests.csproj", "{15A816DB-EB02-4A4F-B6B2-2EAC85EC0AF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ria.Services.Payment.Denomination.Tests", "tests\Ria.Services.Payment.Denomination.Tests\Ria.Services.Payment.Denomination.Tests.csproj", "{9CC319B5-748D-437A-83AD-3D95371950C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +32,19 @@ Global
 		{3695A003-EB64-4849-B852-1F447ED623F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3695A003-EB64-4849-B852-1F447ED623F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3695A003-EB64-4849-B852-1F447ED623F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A816DB-EB02-4A4F-B6B2-2EAC85EC0AF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A816DB-EB02-4A4F-B6B2-2EAC85EC0AF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A816DB-EB02-4A4F-B6B2-2EAC85EC0AF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A816DB-EB02-4A4F-B6B2-2EAC85EC0AF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC319B5-748D-437A-83AD-3D95371950C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC319B5-748D-437A-83AD-3D95371950C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC319B5-748D-437A-83AD-3D95371950C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC319B5-748D-437A-83AD-3D95371950C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0AD227E6-1308-4F45-B8CE-B8361D014C2F} = {177BE4AC-319F-4ADC-B867-5BD83461F67F}
 		{3695A003-EB64-4849-B852-1F447ED623F8} = {177BE4AC-319F-4ADC-B867-5BD83461F67F}
+		{15A816DB-EB02-4A4F-B6B2-2EAC85EC0AF5} = {6424E9D4-5F70-4FCA-9AB7-FF55B0AAEF92}
+		{9CC319B5-748D-437A-83AD-3D95371950C2} = {6424E9D4-5F70-4FCA-9AB7-FF55B0AAEF92}
 	EndGlobalSection
 EndGlobal
