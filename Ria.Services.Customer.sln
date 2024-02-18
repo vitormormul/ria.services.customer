@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ria.Services.Customer.Web.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ria.Services.Payment.Denomination.Tests", "tests\Ria.Services.Payment.Denomination.Tests\Ria.Services.Payment.Denomination.Tests.csproj", "{9CC319B5-748D-437A-83AD-3D95371950C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ria.Services.Customer.Client", "src\Ria.Services.Customer.Client\Ria.Services.Customer.Client.csproj", "{DD023CD0-1042-44AB-9BAA-5B20376F182D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,11 +42,16 @@ Global
 		{9CC319B5-748D-437A-83AD-3D95371950C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CC319B5-748D-437A-83AD-3D95371950C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CC319B5-748D-437A-83AD-3D95371950C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD023CD0-1042-44AB-9BAA-5B20376F182D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD023CD0-1042-44AB-9BAA-5B20376F182D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD023CD0-1042-44AB-9BAA-5B20376F182D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD023CD0-1042-44AB-9BAA-5B20376F182D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0AD227E6-1308-4F45-B8CE-B8361D014C2F} = {177BE4AC-319F-4ADC-B867-5BD83461F67F}
 		{3695A003-EB64-4849-B852-1F447ED623F8} = {177BE4AC-319F-4ADC-B867-5BD83461F67F}
 		{15A816DB-EB02-4A4F-B6B2-2EAC85EC0AF5} = {6424E9D4-5F70-4FCA-9AB7-FF55B0AAEF92}
 		{9CC319B5-748D-437A-83AD-3D95371950C2} = {6424E9D4-5F70-4FCA-9AB7-FF55B0AAEF92}
+		{DD023CD0-1042-44AB-9BAA-5B20376F182D} = {177BE4AC-319F-4ADC-B867-5BD83461F67F}
 	EndGlobalSection
 EndGlobal
