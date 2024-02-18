@@ -11,12 +11,14 @@ public interface ICustomerRepository
 public class CustomerRepository : ICustomerRepository
 {
     private readonly ICustomerPublisher _customerPublisher;
+    private readonly ILogger<CustomerRepository> _logger;
     public Customer[] Customers { get; private set; } = Array.Empty<Customer>();
     private HashSet<int> Ids { get; } = new();
 
-    public CustomerRepository(ICustomerPublisher customerPublisher)
+    public CustomerRepository(ICustomerPublisher customerPublisher, ILogger<CustomerRepository> logger)
     {
         _customerPublisher = customerPublisher;
+        _logger = logger;
         LoadData();
     }
 
@@ -31,6 +33,8 @@ public class CustomerRepository : ICustomerRepository
             {
                 Ids.Add(customer.Id);
             }
+            
+            _logger.LogInformation($"Loaded {Customers.Length} records from in-memory data.");
         }
         catch
         {

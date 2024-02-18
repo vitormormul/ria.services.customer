@@ -33,11 +33,17 @@ var Id = new Id();
 while (true)
 {
     var tasks = new List<Task<IFlurlResponse>>();
+    var random = new Random().Next(4, 10);
+    var sum = 0;
 
-    for (var i = 0; i < new Random().Next(2, 8); i++)
+    for (var i = 0; i < random; i++)
     {
-        tasks.Add("http://localhost:5157/customers".PostJsonAsync(GenerateCustomers()));
+        var customers = GenerateCustomers();
+        tasks.Add("http://localhost:5157/customers".PostJsonAsync(customers));
+        sum += customers.Length;
     }
+    
+    Console.WriteLine($"Sent {random} new requests to the API with {sum} new customers.");
 
     Task.WhenAll(tasks);
     Thread.Sleep(new Random().Next(100, 5000));

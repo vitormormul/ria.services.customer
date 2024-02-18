@@ -9,15 +9,21 @@ public class CustomerController : ControllerBase
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IValidator<Customer> _customerValidator;
+    private readonly ILogger<CustomerController> _logger;
 
-    public CustomerController(ICustomerRepository customerRepository, IValidator<Customer> customerValidator)
+    public CustomerController(ICustomerRepository customerRepository, IValidator<Customer> customerValidator, ILogger<CustomerController> logger)
     {
         _customerRepository = customerRepository;
         _customerValidator = customerValidator;
+        _logger = logger;
     }
 
     [HttpGet]
-    public Customer[] GetCustomers() => _customerRepository.Customers;
+    public Customer[] GetCustomers()
+    {
+        _logger.LogInformation($"{_customerRepository.Customers.Length} customers retrieved.");
+        return _customerRepository.Customers;   
+    }
     
     [HttpPost]
     public async Task<IActionResult> AddCustomers([FromBody] Customer[] customers)
@@ -34,6 +40,8 @@ public class CustomerController : ControllerBase
             return BadRequest(errors.Distinct());
         
         await _customerRepository.AddCustomers(customers.ToArray());
+        
+        _logger.LogInformation($"Inserted {customers.Length} new customers. Total is {_customerRepository.Customers.Length}");
 
         return Ok();
     }
