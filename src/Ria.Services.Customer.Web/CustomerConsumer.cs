@@ -24,7 +24,7 @@ public class CustomerConsumer : BackgroundService
             
             _logger.LogInformation($"Updated in-memory data with {customers.Length} records.");
             
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
         }
     }
 }

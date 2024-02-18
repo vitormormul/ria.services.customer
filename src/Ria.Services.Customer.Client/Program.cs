@@ -28,7 +28,12 @@ string[] lastNames = {
     "Lane"
 };
 
-var Id = new Id();
+var idRef = new Id();
+
+var endpoint = Environment.GetEnvironmentVariable("CUSTOMER_API_ENDPOINT")
+    ?? "http://localhost:5157/customers";
+
+Console.WriteLine($"Sending requests to {endpoint}.");
 
 while (true)
 {
@@ -39,7 +44,7 @@ while (true)
     for (var i = 0; i < random; i++)
     {
         var customers = GenerateCustomers();
-        tasks.Add("http://localhost:5157/customers".PostJsonAsync(customers));
+        tasks.Add(endpoint.PostJsonAsync(customers));
         sum += customers.Length;
     }
     
@@ -66,10 +71,10 @@ Customer GenerateCustomer()
     var age = new Random().Next(10, 90);
     int id;
 
-    lock (Id!)
+    lock (idRef!)
     {
-        id = Id.Value;
-        Id.Value++;
+        id = idRef.Value;
+        idRef.Value++;
     }
 
     return new Customer
