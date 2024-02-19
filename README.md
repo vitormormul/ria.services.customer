@@ -9,7 +9,7 @@ This repository contains three applications developed using C#/.NET as part of a
 [The requirements for the programs in this repository can be found at this link.](https://docs.google.com/document/d/1uxOVrUi6g3qwTDAe8uAFMlJWVMhQDwXg/edit?usp=sharing&ouid=117061835670392908130&rtpof=true&sd=true)
 
 
-### Denomination routine (console application)
+## Denomination routine (console application)
 
 The program attempts to pay out the amounts using the highest denomination available.
 Once there is no more space for the highest denomination, it recursively fills the
@@ -70,9 +70,11 @@ consumer (CustomerConsumer.cs) listens to a channel (queue) every 500 millisecon
 Data is published (CustomerPublisher.cs) to the queue whenever a POST request is made and customers are added to the array.
 5. The repository (CustomerRepository.cs) attempts to load data from the JSON file before starting the application.
 6. To store new customers in a sorted manner, each new customer is iterated over individually and inserted into the array.
-Initially, sorting all new customers and inserting them into the array at once was considered but proved to be inefficient
+Initially, sorting all new customers and inserting them into the array at once was considered but proved to be inefficient.
 
-#### How to run
+![Ria.Services.Customer.Web.POST.png](./docs/Ria.Services.Customer.Web.POST.png)
+
+### How to run
 
 To build the Docker image, navigate to the root of the repository and run:
 
@@ -102,7 +104,7 @@ Once you have the IP address, you can access the Swagger UI at the path `/swagge
 
 Later, you will discover how to run both the API and the client simultaneously using Docker Compose.
 
-### Customer Client (console application)
+## Customer Client (console application)
 
 The client is implemented as a console application with preset inputs and randomly generated requests
 sent to the API.
@@ -114,7 +116,7 @@ and 5000 milliseconds before sending the next request.
 To ensure that each customer is assigned a sequentially increasing ID, a lock mechanism is used to
 access the current ID.
 
-#### How to run
+### How to run
 
 To build the Docker image, navigate to the root of the repository and run:
 
@@ -128,7 +130,7 @@ Then, to run the application, execute the following command:
 docker run customer_client
 ```
 
-### Running client and server
+# Running client and server
 
 > Note: Multiple containers may share the same volume for the same image.
 > Even if you terminate and delete them, starting a new container will
@@ -155,4 +157,12 @@ each other.
 
 ```shell
 docker-compose up
+```
+
+# Others
+
+You can execute the following command at the root of the repository to run the unit tests:
+
+```shell
+dotnet test
 ```

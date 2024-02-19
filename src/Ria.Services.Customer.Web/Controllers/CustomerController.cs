@@ -19,6 +19,8 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public Customer[] GetCustomers()
     {
         _logger.LogInformation($"{_customerRepository.Customers.Length} customers retrieved.");
@@ -26,6 +28,8 @@ public class CustomerController : ControllerBase
     }
     
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddCustomers([FromBody] Customer[] customers)
     {
         var errors = new List<string>();
@@ -38,8 +42,20 @@ public class CustomerController : ControllerBase
 
         if (errors.Any())
             return BadRequest(errors.Distinct());
-        
-        await _customerRepository.AddCustomers(customers.ToArray());
+        try
+        {
+            await _customerRepository.AddCustomers(customers.ToArray());
+        }
+        catch (ArgumentException e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
         
         _logger.LogInformation($"Inserted {customers.Length} new customers. Total is {_customerRepository.Customers.Length}");
 
