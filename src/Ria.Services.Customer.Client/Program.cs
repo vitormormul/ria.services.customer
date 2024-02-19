@@ -41,12 +41,12 @@ while (true)
     var random = new Random().Next(4, 10);
     var sum = 0;
 
-    for (var i = 0; i < random; i++)
+    Parallel.ForEach(Enumerable.Range(0, random), (_, _) =>
     {
         var customers = GenerateCustomers();
         tasks.Add(endpoint.PostJsonAsync(customers));
-        sum += customers.Length;
-    }
+        Interlocked.Add(ref sum, customers.Length);
+    });
     
     Console.WriteLine($"Sent {random} new requests to the API with {sum} new customers.");
 
