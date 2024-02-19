@@ -11,30 +11,38 @@ public interface ICustomerRepository
 public class CustomerRepository : ICustomerRepository
 {
     private readonly ICustomerPublisher _customerPublisher;
+    private readonly ILogger<CustomerRepository> _logger;
     public Customer[] Customers { get; private set; } = Array.Empty<Customer>();
     private HashSet<int> Ids { get; } = new();
 
-    public CustomerRepository(ICustomerPublisher customerPublisher)
+    public CustomerRepository(ICustomerPublisher customerPublisher, ILogger<CustomerRepository> logger)
     {
         _customerPublisher = customerPublisher;
+        _logger = logger;
         LoadData();
     }
 
     private void LoadData()
     {
-        try
+        lock (Customers)
         {
-            using var reader = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data.json"));
-            var customers = reader.ReadToEnd();
-            Customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customer[]>(customers) ?? Array.Empty<Customer>();
-            foreach (var customer in Customers)
+            try
             {
-                Ids.Add(customer.Id);
+                using var reader = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data.json"));
+                var customers = reader.ReadToEnd();
+                Customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customer[]>(customers) ??
+                            Array.Empty<Customer>();
+                foreach (var customer in Customers)
+                {
+                    Ids.Add(customer.Id);
+                }
+
+                _logger.LogInformation($"Loaded {Customers.Length} records from in-memory data.");
             }
-        }
-        catch
-        {
-            Customers = Array.Empty<Customer>();
+            catch
+            {
+                Customers = Array.Empty<Customer>();
+            }
         }
     }
 
@@ -43,7 +51,7 @@ public class CustomerRepository : ICustomerRepository
         var ids = customers.Select(x => x.Id);
 
         return customers.Any(customer => IdExists(customer.Id))
-            && customers.Length == ids.Distinct().Count();
+               && customers.Length == ids.Distinct().Count();
     }
 
     public bool IdExists(int id) => Ids.Contains(id);
@@ -59,7 +67,7 @@ public class CustomerRepository : ICustomerRepository
 
         var i = 0;
         var k = 0;
-        
+
         var temp = new Customer[Customers.Length + 1];
 
         while (i < Customers.Length)

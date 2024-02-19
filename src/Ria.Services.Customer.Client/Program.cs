@@ -28,16 +28,27 @@ string[] lastNames = {
     "Lane"
 };
 
-var Id = new Id();
+var idRef = new Id();
+
+var endpoint = Environment.GetEnvironmentVariable("CUSTOMER_API_ENDPOINT")
+    ?? "http://localhost:5157/customers";
+
+Console.WriteLine($"Sending requests to {endpoint}.");
 
 while (true)
 {
     var tasks = new List<Task<IFlurlResponse>>();
+    var random = new Random().Next(4, 10);
+    var sum = 0;
 
-    for (var i = 0; i < new Random().Next(2, 8); i++)
+    Parallel.ForEach(Enumerable.Range(0, random), (_, _) =>
     {
-        tasks.Add("http://localhost:5157/customers".PostJsonAsync(GenerateCustomers()));
-    }
+        var customers = GenerateCustomers();
+        tasks.Add(endpoint.PostJsonAsync(customers));
+        Interlocked.Add(ref sum, customers.Length);
+    });
+    
+    Console.WriteLine($"Sent {random} new requests to the API with {sum} new customers.");
 
     Task.WhenAll(tasks);
     Thread.Sleep(new Random().Next(100, 5000));
@@ -60,10 +71,10 @@ Customer GenerateCustomer()
     var age = new Random().Next(10, 90);
     int id;
 
-    lock (Id!)
+    lock (idRef!)
     {
-        id = Id.Value;
-        Id.Value++;
+        id = idRef.Value;
+        idRef.Value++;
     }
 
     return new Customer

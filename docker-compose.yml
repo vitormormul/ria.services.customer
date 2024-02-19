@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  customer_web:
+    build:
+      context: .
+      dockerfile: Customer.Web.Dockerfile
+    ports:
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  customer_client:
+    build:
+      context: .
+      dockerfile: Customer.Client.Dockerfile
+    ports:
+      - "5000:80"
+    depends_on:
+      - customer_web
+    environment:
+      - CUSTOMER_API_ENDPOINT=http://customer_web:80/customers
