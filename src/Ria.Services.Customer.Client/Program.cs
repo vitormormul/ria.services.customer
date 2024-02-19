@@ -37,20 +37,24 @@ Console.WriteLine($"Sending requests to {endpoint}.");
 
 while (true)
 {
-    var tasks = new List<Task<IFlurlResponse>>();
+    var postTasks = new List<Task<IFlurlResponse>>();
+    var getTasks = new List<Task<Customer[]>>();
     var random = new Random().Next(4, 10);
     var sum = 0;
 
     Parallel.ForEach(Enumerable.Range(0, random), (_, _) =>
     {
         var customers = GenerateCustomers();
-        tasks.Add(endpoint.PostJsonAsync(customers));
+        postTasks.Add(endpoint.PostJsonAsync(customers));
+        getTasks.Add(endpoint.GetJsonAsync<Customer[]>());
         Interlocked.Add(ref sum, customers.Length);
     });
     
-    Console.WriteLine($"Sent {random} new requests to the API with {sum} new customers.");
+    Console.WriteLine($"Sent {random} new POST requests to the API with {sum} new customers.");
+    Console.WriteLine($"Sent {random} new GET requests to the API.");
 
-    Task.WhenAll(tasks);
+    Task.WhenAll(postTasks);
+    Task.WhenAll(getTasks);
     Thread.Sleep(new Random().Next(100, 5000));
 }
 
