@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 WORKDIR /app
 
-COPY ./Ria.Services.Payment.Denomination ./
+COPY ./src/Ria.Services.Payment.Denomination ./
 
 RUN dotnet restore
 RUN dotnet publish -c Release -o out

@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 WORKDIR /app
 
-COPY ./Ria.Services.Customer.Web ./
+COPY ./src/Ria.Services.Customer.Web ./
 
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
