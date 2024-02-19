@@ -149,19 +149,35 @@ build the images. Navigate to the root of the repository and execute the
 following commands:
 
 ```shell
-docker-compose build --no-cache
+docker compose build --no-cache
 ```
 
 Then the following command to run the containers which will communicate to
 each other.
 
 ```shell
-docker-compose up
+docker compose up
 ```
 
 # Others
 
-You can execute the following command at the root of the repository to run the unit tests:
+- I would add more unit tests to improve test coverage, particularly focusing
+- on domain validation.
+- Considering a larger project, I would split it into multiple .NET projects
+(`.csproj`) to separate concerns and responsibilities. This would accommodate
+more complex domains and additional infrastructure components, such as external
+databases, caches, and queues.
+- I would refactor the API to asynchronously write new customers internally,
+similar to the current json file write operation.
+- Additionally, I would modify the write operation to save new customers to a
+CSV file by appending them. While the data wouldn't be sorted in the CSV, it
+would be sorted upon application startup by running some sort algorithm only
+once, then loading the sorted data into the internal array. This approach would
+improve the speed of the write operation to the in-memory data and ensure
+that the data is persisted and later retrieved in a sorted manner.
+
+You can execute the following command at the root of the repository to run
+the unit tests:
 
 ```shell
 dotnet test
